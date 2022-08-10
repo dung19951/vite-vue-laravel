@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
 class User extends Authenticatable implements HasMedia
 {
@@ -25,7 +25,7 @@ class User extends Authenticatable implements HasMedia
         'password',
     ];
 
-    protected $appends = ['profile_thumbnail','thumbnail'];
+    protected $appends = ['profile_thumbnail', 'thumbnail'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -47,22 +47,36 @@ class User extends Authenticatable implements HasMedia
     ];
 
     public function getProfileThumbnailAttribute()
-{
-    //Check if media has collection and return default.jpg if false
-    if ($this->media->isEmpty()) {
-        return 'default.jpg';
-    } else {
-        return $this->media->first()->getUrl('profile_thumbnail');
-    }  
-}
+    {
+        //Check if media has collection and return default.jpg if false
+        if ($this->media->isEmpty()) {
+            return 'default.jpg';
+        } else {
+            return $this->media->first()->getUrl('profile_thumbnail');
+        }
+    }
 
-public function getThumbnailAttribute()
-{
-    //Check if media has collection and return default.jpg if false
-    if ($this->media->isEmpty()) {
-        return 'default.jpg';
-    } else {
-        return $this->media->first()->getUrl('thumbnail');
-    }  
-}
+    public function getThumbnailAttribute()
+    {
+        //Check if media has collection and return default.jpg if false
+        if ($this->media->isEmpty()) {
+            return 'default.jpg';
+        } else {
+            return $this->media->first()->getUrl('thumbnail');
+        }
+    }
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    /**
+     * Return a key value array, containing any custom claims to be added to the JWT.
+     *
+     * @return array
+     */
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
 }
