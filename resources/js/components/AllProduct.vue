@@ -41,11 +41,13 @@
 </template>
 
 <script>
+import AdminEnum from "../enums/AdminEnum";
 export default {
     data() {
         return {};
     },
     created() {
+        console.log(AdminEnum.TRUE);
         this.$store.dispatch("product/getAll", { self: this });
     },
     computed: {
@@ -55,7 +57,7 @@ export default {
     },
     methods: {
         deleteProduct(id) {
-           this.$store.dispatch('product/deleteProduct', id)
+            this.$store.dispatch("product/deleteProduct", id);
         },
         getAll() {
             return (this.products = this.$store.state.product.products);

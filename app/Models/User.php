@@ -7,10 +7,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\HasMedia;
 
-class User extends Authenticatable
+class User extends Authenticatable implements HasMedia
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, InteractsWithMedia;
 
     /**
      * The attributes that are mass assignable.
@@ -22,6 +24,8 @@ class User extends Authenticatable
         'email',
         'password',
     ];
+
+    protected $appends = ['profile_thumbnail','thumbnail'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -41,4 +45,24 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function getProfileThumbnailAttribute()
+{
+    //Check if media has collection and return default.jpg if false
+    if ($this->media->isEmpty()) {
+        return 'default.jpg';
+    } else {
+        return $this->media->first()->getUrl('profile_thumbnail');
+    }  
+}
+
+public function getThumbnailAttribute()
+{
+    //Check if media has collection and return default.jpg if false
+    if ($this->media->isEmpty()) {
+        return 'default.jpg';
+    } else {
+        return $this->media->first()->getUrl('thumbnail');
+    }  
+}
 }
