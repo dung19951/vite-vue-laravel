@@ -1,18 +1,19 @@
-import axios from "axios";
-import apiUrl from "./api-url";
 
+import Repository from "./Repository";
+
+const resource="/products";
 class ProductService {
     getProduct() {
-        return axios.get(apiUrl() + "products");
+        return Repository.get(`${resource}`);
     }
     createProduct(product) {
-        return axios.post(apiUrl() + "products", product);
+        return Repository.post(`${resource}`, product);
     }
     editProduct(product) {
-        return axios.patch(apiUrl() + "products/" + product.id, product);
+        return Repository.put(`${resource}/${product.id}`, product);
     }
     deleteProduct(id) {
-        return axios.delete(apiUrl() + "products/" + id);
+        return Repository.delete(`${resource}/${id}`);
     }
 }
 export default new ProductService();
