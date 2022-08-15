@@ -20,6 +20,7 @@
 </template>
  
 <script>
+import ProductService from "../services/product.service";
     export default {
         data() {
             return {
@@ -27,8 +28,7 @@
             }
         },
         created() {
-            this.axios
-                .get(`http://localhost:8000/api/products/${this.$route.params.id}`)
+           ProductService.getProductDetail(this.$route.params.id)
                 .then((res) => {
                     this.product = res.data;
                 });
